@@ -1,0 +1,106 @@
+---
+title: "Medicago experiment"
+author: "Ryan Farquharson"
+date: "3 October 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Aims
+This experiment was set up to:
+
+1) compare the nodulation and nitrogen fixation of a herbicide tolerant medicago variety to the near isogenic herbicide susceptable strain in the absence and presence of chlorsulfuron - a group B herbicide; and 
+2) provide mechanistic insights into how group B herbicides affect nitrogen fixation.
+
+Different stakeholders should be able to answer different questions from the results of this experiment.
+
+Farmers and agronomists:
+I have used Group B herbicdes in my paddocks.  Is nitrogen fixation by legumes being impacted upon?
+How well does this new variety, FEH-1 (Angel), grow and fix nitrogen in the presence and absence of herbicide?
+How can I tell what is happening in my paddocks?
+  Do I have residual group B herbicides?
+  Will my plants nodulate?
+  If they nodulate, will they still fix nitrogen?
+
+Scientists:
+What are the mechanisms by which group B herbicides impact on nitrogen fixation?
+  Plant only
+    Root growth
+    Root hairs
+  Rhizobia only
+    Saprophytic growth
+  Plant and rhizobia
+    Signalling and nodule intitiation
+    Nodule development
+    Mutual exchange of compounds
+    
+## Response variables
+
+```{r}
+str(raw3)
+```
+
+Since this experiment was set up with multiple objectives, a range of response variables were measured:
+  Biomass of shoots, roots and nodules
+  Nitrogen contents of shoots and roots plus nodules
+  Pink nodule number
+  Pink nodule mass
+  Non-pink nodule number
+  Non-pink nodule mass
+  Acetylene reduction activity
+
+From these response variables, a number of derived variables can be calculated:
+  Total biomass and nitrogen
+  Nodulation (nodule number or mass on a root biomass basis (pink or total))
+  Nodule actiivty (acetylene reduction activity per unit nodule mass or per nodule (pink or total))
+  Nitrogen concentrations
+  Amount of nitrogen fixed
+
+The response variables chosen for analysis will need to be chosen depending on the specific questions that need to be answered.
+
+## Experimental factors
+
+The experiment can be considered to be factorial with 3 factors and was blocked.
+
+Variety (2 levels):  
+  Medicago truncatula cv Herald;
+  Medicago truncatula cv FEH-1.
+
+Herbicide application (2 levels): 
+  Herbicide - chlorsulfuron applied to 17 day old seedlings; 
+  No herbicide applied.
+
+Rhizobia (5 levels): uninoculated without nitrogen; uninoculated with nitrogen; RRI128; RRI128 plus herbicide; RRI128 plus herbicide and washed
+
+Block (5 blocks):  
+  The experiment was set up, arranged in the glasshouse, and analysed in blocks numberred 1 to 5. Each block contained all treatments, and all pots were randomised within each block.
+
+## How many experimental conditions?
+
+The experiment was set up with multiple objectives, thus subsets of the data should be analysed depending on the specific research question to be answered.
+
+The Herbicide and Variety factors can be considered as a 2 by 2 factorial (4 combinations)
+
+Depending on which repsonse variable is being analysed, a subset of rhizobia treatments may be considered.  
+For example, it makes no sense to include the uninoculated treatments in any analysis of nodulation or nodule activity.
+
+
+The Block factor (5 blocks) can be considered to be uniform across all other treatments since all pots were randomised within a block.  Hence block can be considered to be an additive factor.
+
+
+## Questions for Terry
+
+ELegant ways to subset (levels)
+
+Transformation - e.g. ara
+
+Derived or calculated variables e.g. amount of nitrogen fixed, fixed per nodule, fixed per unit nodule mass
+
+Nested designs - e.g. innoculated/uninoculated +-N, innoculated +H, -H, washed
+
+
+
+
