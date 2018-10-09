@@ -9,39 +9,63 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r install packages, echo=FALSE}
+install.packages("emmeans")
+install.packages("ggplot2")
+install.packages("tidyverse")
+install.packages("lmerTest")
+library(emmeans)
+library(ggplot2)
+library(tidyverse)
+library(lmerTest)
+```
+
 ## Aims
 This experiment was set up to:
 
-1) compare the nodulation and nitrogen fixation of a herbicide tolerant medicago variety to the near isogenic herbicide susceptable strain in the absence and presence of chlorsulfuron - a group B herbicide; and 
+1) compare the nodulation and nitrogen fixation of medicago truncatula cv Herald to a near isogenic herbicide tolerant variety in the absence and presence of chlorsulfuron - a group B herbicide; and 
+
 2) provide mechanistic insights into how group B herbicides affect nitrogen fixation.
 
 Different stakeholders should be able to answer different questions from the results of this experiment.
 
 Farmers and agronomists:
-I have used Group B herbicdes in my paddocks.  Is nitrogen fixation by legumes being impacted upon?
-How well does this new variety, FEH-1 (Angel), grow and fix nitrogen in the presence and absence of herbicide?
-How can I tell what is happening in my paddocks?
+
+"Is nitrogen fixation by legumes being impacted upon when group B herbicides have been used?"
+"Is it just because biomass is knocked back, or is nfix being impacted more than plant growth?"
+"How well does this new variety, FEH-1 (Angel), grow and fix nitrogen in the presence and absence of herbicide?"
+"How can I tell what is happening in my paddocks?
   Do I have residual group B herbicides?
   Will my plants nodulate?
-  If they nodulate, will they still fix nitrogen?
+  If they nodulate, will they still fix nitrogen?"
 
 Scientists:
-What are the mechanisms by which group B herbicides impact on nitrogen fixation?
+"What are the mechanisms by which group B herbicides impact on nitrogen fixation?"
   Plant only
     Root growth
     Root hairs
   Rhizobia only
     Saprophytic growth
-  Plant and rhizobia
+  SYmbiosis - Plant and rhizobia
     Signalling and nodule intitiation
     Nodule development
     Mutual exchange of compounds
-    
-## Response variables
 
-```{r}
-str(raw3)
-```
+## Methonds in brief
+
+Rhizobia were cultured in vitro with and without chlorsulfuron.
+
+Plants were grown in pots containing a sand-vermiculite mix with limiting nitrogen.
+
+Plants were inoculated or uninoculated with and without additional nitrogen.
+
+Chlorsulfuron was applied using a spray rig.
+
+Plants were harvested, acetylene reduction assays were performed, nodules counted and collected, biomass and nitrogen contents measured.
+
+## The data
+    
+### Response variables
 
 Since this experiment was set up with multiple objectives, a range of response variables were measured:
   Biomass of shoots, roots and nodules
@@ -61,24 +85,30 @@ From these response variables, a number of derived variables can be calculated:
 
 The response variables chosen for analysis will need to be chosen depending on the specific questions that need to be answered.
 
-## Experimental factors
+
+### Experimental factors
 
 The experiment can be considered to be factorial with 3 factors and was blocked.
 
 Variety (2 levels):  
-  Medicago truncatula cv Herald;
-  Medicago truncatula cv FEH-1.
+  - Herald: Medicago truncatula cv Herald;
+  - FEH-1: Medicago truncatula cv FEH-1.
 
 Herbicide application (2 levels): 
-  Herbicide - chlorsulfuron applied to 17 day old seedlings; 
-  No herbicide applied.
+  - Herbicide: chlorsulfuron applied to 17 day old seedlings; 
+  - NoHerbicide: no herbicide applied applied.
 
-Rhizobia (5 levels): uninoculated without nitrogen; uninoculated with nitrogen; RRI128; RRI128 plus herbicide; RRI128 plus herbicide and washed
+Rhizobia (5 levels): 
+  - 0-N: uninoculated without nitrogen; 
+  - 0+N: uninoculated with nitrogen; 
+  - RRI128: rhizobia strain for edicago truncatula; 
+  - herb: RRI128 plus herbicide in the culture; 
+  - washed: RRI128 plus herbicide in the culture then washed
 
 Block (5 blocks):  
   The experiment was set up, arranged in the glasshouse, and analysed in blocks numberred 1 to 5. Each block contained all treatments, and all pots were randomised within each block.
 
-## How many experimental conditions?
+### How many experimental conditions?
 
 The experiment was set up with multiple objectives, thus subsets of the data should be analysed depending on the specific research question to be answered.
 
@@ -91,11 +121,93 @@ For example, it makes no sense to include the uninoculated treatments in any ana
 The Block factor (5 blocks) can be considered to be uniform across all other treatments since all pots were randomised within a block.  Hence block can be considered to be an additive factor.
 
 
+### Raw data
+
+```{r}
+# read in raw data from csv file with headers
+
+allsamples <- read.csv("data/herbicide_raw_data.csv")
+
+allsamples$Block <- factor(herb$Block)
+allsamples$Inoculation <- factor(herb$Inoculation, c("RRI128", "washed", "herb", "O-N", "O+N"))
+allsamples$Herbicide <- factor(herb$Herbicide, c("NoHerbicide", "Herbicide"))
+
+# return the structure of the dataframe
+str(allsamples)
+
+# filer data frame to include only pots that were innoculated 
+
+inoculated <- filter(allsamples, Inoculation %in% c("RRI128", "herb", "washed"))
+
+str(inoculated)
+
+```
+
+In R it is easy to do visualisation and analysis on calculations or transformations of the raw data.
+
+For example, instead of making a new column called totalN for the sum of shootN and bgN, simply do plots and statistical modelling of shootN + bgN.
+
+## Visualisation
+
+Visualisation can be useful to quickly examine the data in relation to treatments, combinations of treatments, and to other data.  The goal is to identify potential stories that we can explore further using statistial models.
+
+### Did the experiment work?
+
+Unfortunately, there was some nitrogen in the potting mixed used, but the unoninoculated controls with and without nitrogen, we can tell that in this experiment plants were nitrogen limited.  Looking at the relationship between plant biomass and plant nitrogen by inoculation type, you can clearly see that inoculated plants lie between the uninoculated plants with and without added nitrogen.
+
+```{r}
+ggplot(allsamples, aes(shootDM + bgDM, shootN + bgN, colour = Inoculation)) +
+  geom_smooth(aes(fill = Inoculation)) +
+  geom_point(size = 3) +
+  theme(panel.grid = element_blank(),
+         panel.background = element_rect(fill = "white"),
+        panel.border = element_rect(fill = NA))
+```
+
+Also, none of the uninoculated plants had nodules and there was no acetylene reduction activity in any of the uninoculated plants that were tested, indicating that there was no cross contamination in the experiment (data not shown).
+
+### Can herbicides affect nitrogen fixation?
+
+
+#### Plant N
+The most simple way to determine whether the amount of nitrogen fixed has been affected by chlorsulfuron is to compare the nitrogen contents for plants with and without chlorsulfuron.
+
+```{r}
+
+
+```
+
+#### ARA
+We also have a measure on nitrogenase activity.
+
+
+#### Nodulation
+We spent a lot of time plucking and counting nodules. This data is noisy but still useful, as it can indicate whether nodule initiation or development are affected.  Given the timing of herbicide application, we would expect nodule mass to be affected more so than nodule number.
+
+And what about ARA expressed on a nodule number or mass basis?
+
+But here's something interesting.  We get a very nice relationship between shoot biomass and ARA.
+
+#### What can other relationships tell us?
+Is this purely a plant growth issue?
+
+
+### What are the mechanisms
+
+### Is FEH-1 a solution?
+
+FEH-1 vs Herald - with and without herbicide
+
+What about when there is no herbicide?
+
+
 ## Questions for Terry
 
 ELegant ways to subset (levels)
 
-Transformation - e.g. ara
+Transformation - e.g. ara (square root?)
+
+Getting specific contrasts and showing that the differences are different from each other
 
 Derived or calculated variables e.g. amount of nitrogen fixed, fixed per nodule, fixed per unit nodule mass
 
