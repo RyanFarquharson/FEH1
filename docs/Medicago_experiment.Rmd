@@ -10,14 +10,13 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r install packages, echo=FALSE}
-install.packages("emmeans")
+
 install.packages("ggplot2")
 install.packages("tidyverse")
-install.packages("lmerTest")
-library(emmeans)
+
 library(ggplot2)
 library(tidyverse)
-library(lmerTest)
+
 ```
 
 ## Aims
@@ -126,11 +125,14 @@ The Block factor (5 blocks) can be considered to be uniform across all other tre
 ```{r}
 # read in raw data from csv file with headers
 
-allsamples <- read.csv("data/herbicide_raw_data.csv")
+getwd()
+
+allsamples <- read.csv("../data/herbicide_raw_data.csv")
 
 allsamples$Block <- factor(herb$Block)
 allsamples$Inoculation <- factor(herb$Inoculation, c("RRI128", "washed", "herb", "O-N", "O+N"))
 allsamples$Herbicide <- factor(herb$Herbicide, c("NoHerbicide", "Herbicide"))
+
 
 # return the structure of the dataframe
 str(allsamples)
@@ -151,7 +153,7 @@ For example, instead of making a new column called totalN for the sum of shootN 
 
 ## Visualisation
 
-Visualisation can be useful to quickly examine the data in relation to treatments, combinations of treatments, and to other data.  The goal is to identify potential stories that we can explore further using statistial models.
+Visualisation can be useful to quickly examine the data in relation to treatments, combinations of treatments, and to other data.  The goal is to identify potential stories that we can explore further or find support for using statistical models.
 
 ### Did the experiment work?
 
@@ -160,7 +162,7 @@ Unfortunately, there was some nitrogen in the potting mixed used, but the unonin
 ```{r}
 ggplot(allsamples, aes(shootDM + bgDM, shootN + bgN, colour = Inoculation)) +
   geom_smooth(aes(fill = Inoculation)) +
-  geom_point(size = 3) +
+  geom_point(size = 3, alpha = 0.5) +
   theme(panel.grid = element_blank(),
          panel.background = element_rect(fill = "white"),
         panel.border = element_rect(fill = NA))
@@ -171,113 +173,219 @@ Also, none of the uninoculated plants had nodules and there was no acetylene red
 ### Can herbicides affect nitrogen fixation?
 
 #### Plant N
-The most simple way to determine whether the amount of nitrogen fixed has been affected by chlorsulfuron is to compare the nitrogen contents for plants with and without chlorsulfuron.
+The most simple way to determine whether the amount of nitrogen fixed has been affected by chlorsulfuron is to compare the nitrogen contents for inoculated plants with and without chlorsulfuron.
 
 ```{r}
-ggplot(allsamples, aes(Variety, shootN + bgN, colour = Herbicide)) +
-  geom_point() +
+ggplot(inoculated, aes(Herbicide, shootN + bgN, colour = Variety)) +
   geom_boxplot() +
+  geom_point(position = position_dodge(width = 0.75), size = 4, alpha = 0.5) +
+  #scale_x_discrete("Herbicide", ) +
   theme(panel.grid = element_blank(),
         panel.background = element_rect(fill = "white"),
         panel.border = element_rect(fill = NA))
 
 ```
 
-Clearly herbicide application resulted in less nitrogen in Herald plants, but probably not in FEH-1 plants.
+Clearly herbicide application resulted in less nitrogen in Herald plants, but probably not as severe in FEH-1 plants.
+
+Also note that in the absence of herbicide there was more nitrogen in Herald plants than FEH-1 plants.  In the presence of herbicide, the opposite was true.  There's an interaction if ever I saw one.
 
 But is this just because biomass was lower?  Let's take a look.
 
 ```{r}
-ggplot(allsamples, aes(Variety, shootDM + bgDM, colour = Herbicide)) +
-  geom_point() +
+ggplot(inoculated, aes(Herbicide, shootDM + bgDM, colour = Variety)) +
   geom_boxplot() +
+  geom_point(position = position_dodge(width = 0.75), size = 4, alpha = 0.5) +
   theme(panel.grid = element_blank(),
         panel.background = element_rect(fill = "white"),
         panel.border = element_rect(fill = NA))
 ```
 
-Hmm.  That's interesting.  Looks like there's a drop in biomass for FEH-1, the herbicide tolerant variety.  We'll need to take a closer look at that.  What if we restrict our analysis to inoculated plants only?
+Looks familiar, right?  Lools like this might just be a biomass thing, rather than a specific effect on nitrogen fixation.  But we'll take a closer look to be sure.
 
-```{r}
-
-ggplot(inoculated, aes(Variety, shootN + bgN, colour = Herbicide)) +
-  geom_point() +
-  geom_boxplot() +
-  theme(panel.grid = element_blank(),
-        panel.background = element_rect(fill = "white"),
-        panel.border = element_rect(fill = NA))
-
-ggplot(inoculated, aes(Variety, shootDM + bgDM, colour = Herbicide)) +
-  geom_point() +
-  geom_boxplot() +
-  theme(panel.grid = element_blank(),
-        panel.background = element_rect(fill = "white"),
-        panel.border = element_rect(fill = NA))
-```
-
-It's a similar story.
 
 #### ARA
-Let's zero in on nitrogen fixation itself.  We have a measure on nitrogenase activity at the time of harvest - the acetylene reduction assay.
+To zero in on nitrogen fixation itself, we have a measure on nitrogenase activity at the time of harvest - the acetylene reduction assay, whereby acetylene is reduced to ethylene (both of which we can measure in a GC with an FID) instead of nitrogen being reduced to ammonia.
 
 ```{r}
-ggplot(herb4, aes(Variety, ara, colour = Herbicide)) +
-  geom_point() +
+ggplot(inoculated, aes(Herbicide, ara, colour = Variety)) +
   geom_boxplot() +
-  theme(panel.grid = element_blank(),
+  geom_point(position = position_dodge(width = 0.75), size = 4, alpha = 0.5) +
+    theme(panel.grid = element_blank(),
         panel.background = element_rect(fill = "white"),
         panel.border = element_rect(fill = NA))
 ```
 
-Look familiar?
+Ok, the data is noisy, but you can see that nitrogenase activity of FEH-1 and Herald plants in the absence of herbicide are on par.  Both take a hit with hebricide, but Herald really gets knocked hard.
 
 #### Nodulation
-We spent a lot of time plucking and counting nodules. This data is noisy but still useful, as it can indicate whether nodule initiation or development are affected.  Given the timing of herbicide application, we would expect nodule mass to be affected more so than nodule number.
 
-And what about ARA expressed on a nodule number or mass basis?
+We spent a lot of time plucking and counting nodules. Noting that herbicide was applied to shoots later than nodule initiation time, we would expect differential effects of herbicide on pink and non-pink nodules and also nodule mass.  Given the timing of herbicide application, we would expect nodule mass to be affected more so than nodule number.
 
-But here's something interesting.  We get a very nice relationship between shoot biomass and ARA.
+```{r nodulation}
 
-#### What can other relationships tell us?
-What's driving what?
-
-```{r}
-
-ggplot(herb3, aes(ara, bgDM + shootDM, colour = Herbicide)) +
-  geom_point() +
-  facet_wrap("Variety")
-
-```
-
-Is this purely a plant growth issue? Don't forget about the controls...
-
-```{r}
-
-ggplot(herb5, aes(Variety, shootN, colour = Herbicide)) +
-  geom_point() +
+ggplot(inoculated, aes(Herbicide, pinknods, colour = Variety)) +
   geom_boxplot() +
-  facet_wrap("Innoculation") +
-  theme(panel.grid = element_blank(),
+  geom_point(position = position_dodge(width = 0.75), size = 4, alpha = 0.5) +
+    theme(panel.grid = element_blank(),
         panel.background = element_rect(fill = "white"),
+        panel.border = element_rect(fill = NA))
+
+
+ggplot(inoculated, aes(Herbicide, pinknodmass, colour = Variety)) +
+  geom_boxplot() +
+  geom_point(position = position_dodge(width = 0.75), size = 4, alpha = 0.5) +
+    theme(panel.grid = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.border = element_rect(fill = NA))
+
+
+ggplot(inoculated, aes(pinknods, pinknodmass, colour = Herbicide)) +
+  #geom_smooth(aes(fill = Inoculation)) +
+  geom_point(size = 3, alpha = 0.5) +
+  facet_wrap("Variety") +
+  theme(panel.grid = element_blank(),
+         panel.background = element_rect(fill = "white"),
         panel.border = element_rect(fill = NA))
 ```
 
-That's interesting, isn't it.  Obviously this isn;t purely a nitrogen fixation issue.  Plant growth is being reduced by chlorsulfuron even when plants are supplied with N.  
+
+Noting that some of the nodule initiation and development would have occured prior to herbicide application, can we see anything interesting in the realtionships between ARA and nodule number or mass?
+
+```{r}
+ggplot(inoculated, aes(pinknods, ara, colour = Herbicide)) +
+  #geom_smooth(aes(fill = Inoculation)) +
+  geom_point(size = 3, alpha = 0.5) +
+  facet_wrap("Variety") +
+  theme(panel.grid = element_blank(),
+         panel.background = element_rect(fill = "white"),
+        panel.border = element_rect(fill = NA))
+
+ggplot(inoculated, aes(pinknodmass, ara, colour = Herbicide)) +
+  #geom_smooth(aes(fill = Inoculation)) +
+  geom_point(size = 3, alpha = 0.5) +
+  facet_wrap("Variety") +
+  theme(panel.grid = element_blank(),
+         panel.background = element_rect(fill = "white"),
+        panel.border = element_rect(fill = NA))
+
+
+```
+
+Nodule number and mass are clustering strongly with herbicide treatment for Herald, but in FEH-1 we get a bit more of a continuum.
+
+It is also interesting that there is a good relationship between plant biomass and ARA for FEH-1, but this breaks down for Herald.
+
+```{r}
+
+ggplot(inoculated, aes(bgDM + shootDM, ara,  colour = Herbicide)) +
+  geom_point(size = 3, alpha = 0.5) +
+  facet_wrap("Variety") +
+  theme(panel.grid = element_blank(),
+         panel.background = element_rect(fill = "white"),
+        panel.border = element_rect(fill = NA))
+
+```
+
+
+
+#### What can other relationships tell us?
+
+What's driving what?  Given that there is a difference in the tolerance of the two varieties to herbicide, can we can use this difference to tell us whether reduced growth and biomass is affecting nitrogen fixation, or vice versa?
+
 
 ### What are the mechanisms
+Is this purely a plant growth issue? 
+
+Let's not forge the uninocuated controls...
+
+```{r}
+
+ggplot(uninoculated, aes(Herbicide, shootN + bgN, colour = Variety)) +
+  geom_boxplot() +
+  geom_point(position = position_dodge(width = 0.75), size = 4, alpha = 0.5) +
+  facet_wrap("Inoculation") +
+  theme(panel.grid = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.border = element_rect(fill = NA))
+
+ggplot(uninoculated, aes(Herbicide, shootDM + bgDM, colour = Variety)) +
+  geom_boxplot() +
+  geom_point(position = position_dodge(width = 0.75), size = 4, alpha = 0.5) +
+  facet_wrap("Inoculation") +
+  theme(panel.grid = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.border = element_rect(fill = NA))
+
+```
+
+Obviously this isn't purely a nitrogen fixation issue.  Plant growth and nitrogen is being reduced by chlorsulfuron even when uninoculated plants are supplied with N.  
+
+### What about the rhizobia?
+Prior to inoculation, rhizobia were cultured with (herb) and without herbicide (RRI128).  And to check whether herbicide was carrying over with the inoculum, we also did a rinsing proceedure (washed).
+
+There were not any obvious main effects, but it will be interesting to see whether the stats reveal any subtle interactions.
 
 ### Is FEH-1 a solution?
 
-FEH-1 vs Herald - with and without herbicide
+Yes.  And no.
 
-What about when there is no herbicide?
+You'll have noted the interactions whereby in the presence of herbicide, FEH-1 generally performed better than Herald.  But in the absence of herbicde, Herald generally performed better that FEH-1.
+
+So if group B herbicides are used in-crop, or are have been used in preceeding crops and are expected to still reside in the soil, FEH-1 would be the best choice.  If, group B herbicides are not an issue, stick with Herald.
+
+
+## To summarise
+
 
 
 ## Now for some stats
 
 We've looked at the data.  We've seen some stories.  Do the stats support them?  Is there anything we've missed?
 
+Let's do some statistical modelling to test these ideas...
 
+```{r install stats packages, echo=FALSE}
+
+install.packages("lmerTest")
+install.packages("emmeans")
+library(lmerTest)
+library(emmeans)
+
+
+```
+
+
+
+```{r}
+aralmer <- lmer(ara~Variety*Herbicide*Inoculation + (1|Block), data=inoculated)
+anova(aralmer)
+summary(aralmer)
+emmeans(aralmer, ~Variety*Herbicide, type = "response")
+plot(aralmer, which = 1)
+```
+
+```{r}
+sqrt_ara_lmer <- lmer(sqrt(ara)~Variety*Herbicide*Inoculation + (1|Block), data=inoculated)
+anova(sqrt_ara_lmer)
+summary(sqrt_ara_lmer)
+emmeans(sqrt_ara_lmer, ~Variety*Herbicide, type = "response")
+plot(sqrt_ara_lmer)
+
+
+```
+
+
+```{r}
+log_ara_lmer <- lmer(log(ara+1)~Variety*Herbicide*Inoculation + (1|Block), data=inoculated)
+anova(log_ara_lmer)
+summary(log_ara_lmer)
+emmeans(log_ara_lmer, ~Variety*Herbicide, type = "response")
+plot(log_ara_lmer)
+
+View(inoculated)
+
+```
 
 
 ## Questions for Terry
