@@ -32,26 +32,40 @@ str(herb)
 herb4 <- filter(herb, Innoculation %in% c("RRI128", "herb", "washed"))
 str(herb4)
 
+herb5 <- filter(herb, Innoculation %in% c( "O-N", "O+N"))
+str(herb5)
+
 
 # some plots for visualisation
 
-ggplot(herb, aes(Variety, shootDM + bgDM, colour = Herbicide)) +
-  geom_point() +
-  geom_boxplot() +
-  facet_wrap("Innoculation")
-
-
-ggplot(herb, aes(Variety, shootN, colour = Herbicide)) +
-  geom_point() +
-  geom_boxplot() +
-  facet_wrap("Innoculation")
+## Relationships between biomass and nitrogen
 
 ggplot(herb, aes(shootDM + bgDM, shootN + bgN, colour = Innoculation)) +
   geom_smooth(aes(fill = Innoculation)) +
   geom_point(size = 3) +
   theme(panel.grid = element_blank(),
          panel.background = element_rect(fill = "white"),
+        panel.border = element_rect(fill = NA)) #+
+  facet_wrap("Herbicide")
+
+  
+ggplot(herb4, aes(Variety, ara, colour = Herbicide)) +
+  geom_point() +
+  geom_boxplot() +
+  theme(panel.grid = element_blank(),
+        panel.background = element_rect(fill = "white"),
         panel.border = element_rect(fill = NA))
+
+
+ggplot(herb5, aes(Variety, shootN, colour = Herbicide)) +
+  geom_point() +
+  geom_boxplot() +
+  facet_wrap("Innoculation") +
+  theme(panel.grid = element_blank(),
+        panel.background = element_rect(fill = "white"),
+        panel.border = element_rect(fill = NA))
+
+
 
 
 ggplot(herb3, aes(shootDM, shootN, colour = Herbicide)) +
@@ -72,7 +86,15 @@ ggplot(herb3, aes(shootDM, ara, colour = Herbicide)) +
   geom_point() +
   facet_wrap("Variety")
 
-ggplot(herb3, aes(ara, bgDM + shootDM, colour = Herbicide)) +
+ggplot(herb3, aes(pinknods, ara, colour = Herbicide)) +
+  geom_point() +
+  facet_wrap("Variety")
+
+ggplot(herb3, aes(pinknodmass, ara, colour = Herbicide)) +
+  geom_point() +
+  facet_wrap("Variety")
+
+ggplot(herb3, aes(bgDM + shootDM, ara, colour = Herbicide)) +
   geom_point() +
   facet_wrap("Variety")
 
