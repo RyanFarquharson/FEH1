@@ -165,7 +165,7 @@ Unfortunately, there was some nitrogen in the potting mixed used, but the uninoc
 
 ```{r}
 ggplot(allsamples, aes(shootDM + bgDM, shootN + bgN, colour = Inoculation)) +
-  geom_smooth(aes(fill = Inoculation)) +
+  geom_smooth(aes(fill = Inoculation), alpha = 0.2) +
   geom_point(size = 3, alpha = 0.5) +
   theme(panel.grid = element_blank(),
          panel.background = element_rect(fill = "white"),
@@ -605,4 +605,14 @@ Shoots were affected differently to roots.
 Importantly, nodule mass was more sensitive to root mass, but this may simply be a matter of timing.
 There were some differences in rhizobia treatments indiating potential carryover of herbicide from cultures of rhizobia and indicating the importance of topical exposure to herbicide.
 This experiment was a good first look, but with some well designed experiments it should be possible to better represent real agricultural systems, and also to get a better mechanistic understanding of how group B herbicides affect nodulation and nitrgen fixation.
+
+
+## What did I learn?
+
+Using Rmarkdown is an excellent way to work.  It enables you to bring together the data, the exploratory visualisation, the statistical modelling, the explanatory visualisation and the reporting into a single document that is easily updatable with version control, easy to use for presenting and discussing, and gives you the ability to make into a nice shiny document as an html or pdf. Brilliant.  I love it.
+
+Visualisation is super useful for exploration.  I need to improve my ggplot skills, and think more about how to use visualisation for explanation too.
+
+Make the statistical modelling work for you.  Think about it from the perspective of supporting your data to answer the questions you are interested in, rather than it being an excerise to get p values, or going through the motions of looking at every bit of data you have and aimlessly identifying differences.
+
 
