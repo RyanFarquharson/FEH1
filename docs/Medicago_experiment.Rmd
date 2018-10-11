@@ -18,6 +18,10 @@ library(ggplot2)
 library(tidyverse)
 
 ```
+## Introduction
+This experiment was set up with the understanding that FEH-1 was tolerant of group B herbicides and would therefore provide a background in which to determine whether the impact of group B herbicides on nitrogen fixation was entirely plant mediated or other mechanisms were at play.
+
+The experiment was not designed to represent a real paddock in which residual herbicide were present in the soil.  As such, the application of herbicide to directly to plant shoots of 17 day old seedlings represents a single set of circumstances from which some conclusions can be drawn, and from which further experiments can be designed.
 
 ## Aims
 This experiment was set up to:
@@ -45,8 +49,8 @@ Scientists:
     Root hairs
   Rhizobia only
     Saprophytic growth
-  SYmbiosis - Plant and rhizobia
-    Signalling and nodule intitiation
+  Symbiosis - Plant and rhizobia
+    Signalling and nodule initiation
     Nodule development
     Mutual exchange of compounds
 
@@ -78,7 +82,7 @@ Since this experiment was set up with multiple objectives, a range of response v
 From these response variables, a number of derived variables can be calculated:
   Total biomass and nitrogen
   Nodulation (nodule number or mass on a root biomass basis (pink or total))
-  Nodule actiivty (acetylene reduction activity per unit nodule mass or per nodule (pink or total))
+  Nodule activity (acetylene reduction activity per unit nodule mass or per nodule (pink or total))
   Nitrogen concentrations
   Amount of nitrogen fixed
 
@@ -100,12 +104,12 @@ Herbicide application (2 levels):
 Rhizobia (5 levels): 
   - 0-N: uninoculated without nitrogen; 
   - 0+N: uninoculated with nitrogen; 
-  - RRI128: rhizobia strain for edicago truncatula; 
+  - RRI128: rhizobia strain for medicago truncatula; 
   - herb: RRI128 plus herbicide in the culture; 
   - washed: RRI128 plus herbicide in the culture then washed
 
 Block (5 blocks):  
-  The experiment was set up, arranged in the glasshouse, and analysed in blocks numberred 1 to 5. Each block contained all treatments, and all pots were randomised within each block.
+  The experiment was set up, arranged in the glasshouse, and analysed in blocks numbered 1 to 5. Each block contained all treatments, and all pots were randomised within each block.
 
 ### How many experimental conditions?
 
@@ -113,7 +117,7 @@ The experiment was set up with multiple objectives, thus subsets of the data sho
 
 The Herbicide and Variety factors can be considered as a 2 by 2 factorial (4 combinations)
 
-Depending on which repsonse variable is being analysed, a subset of rhizobia treatments may be considered.  
+Depending on which response variable is being analysed, a subset of rhizobia treatments may be considered.  
 For example, it makes no sense to include the uninoculated treatments in any analysis of nodulation or nodule activity.
 
 
@@ -157,7 +161,7 @@ Visualisation can be useful to quickly examine the data in relation to treatment
 
 ### Did the experiment work?
 
-Unfortunately, there was some nitrogen in the potting mixed used, but the unoninoculated controls with and without nitrogen, we can tell that in this experiment plants were nitrogen limited.  Looking at the relationship between plant biomass and plant nitrogen by inoculation type, you can clearly see that inoculated plants lie between the uninoculated plants with and without added nitrogen.
+Unfortunately, there was some nitrogen in the potting mixed used, but the uninoculated controls with and without nitrogen, we can tell that in this experiment plants were nitrogen limited.  Looking at the relationship between plant biomass and plant nitrogen by inoculation type, you can clearly see that inoculated plants lie between the uninoculated plants with and without added nitrogen.
 
 ```{r}
 ggplot(allsamples, aes(shootDM + bgDM, shootN + bgN, colour = Inoculation)) +
@@ -201,7 +205,7 @@ ggplot(inoculated, aes(Herbicide, shootDM + bgDM, colour = Variety)) +
         panel.border = element_rect(fill = NA))
 ```
 
-Looks familiar, right?  Lools like this might just be a biomass thing, rather than a specific effect on nitrogen fixation.  But we'll take a closer look to be sure.
+Looks familiar, right?  On the surface it looks like the main story in this experiment is a biomass thing, rather than a specific effect on nitrogen fixation.  But we'll take a closer look to be sure.
 
 
 #### ARA
@@ -216,7 +220,7 @@ ggplot(inoculated, aes(Herbicide, ara, colour = Variety)) +
         panel.border = element_rect(fill = NA))
 ```
 
-Ok, the data is noisy, but you can see that nitrogenase activity of FEH-1 and Herald plants in the absence of herbicide are on par.  Both take a hit with hebricide, but Herald really gets knocked hard.
+Ok, the data is noisy, but you can see that nitrogenase activity of FEH-1 and Herald plants in the absence of herbicide are on par.  Both take a hit with herbicide, but FEH-1 hangs on whilst Herald really gets knocked hard.
 
 #### Nodulation
 
@@ -250,7 +254,7 @@ ggplot(inoculated, aes(pinknods, pinknodmass, colour = Herbicide)) +
 ```
 
 
-Noting that some of the nodule initiation and development would have occured prior to herbicide application, can we see anything interesting in the realtionships between ARA and nodule number or mass?
+Noting that some of the nodule initiation and development would have occurred prior to herbicide application, can we see anything interesting in the relationships between ARA and nodule number or mass?
 
 ```{r}
 ggplot(inoculated, aes(pinknods, ara, colour = Herbicide)) +
@@ -274,7 +278,7 @@ ggplot(inoculated, aes(pinknodmass, ara, colour = Herbicide)) +
 
 Nodule number and mass are clustering strongly with herbicide treatment for Herald, but in FEH-1 we get a bit more of a continuum.
 
-It is also interesting that there is a good relationship between plant biomass and ARA for FEH-1, but this breaks down for Herald.
+It is also interesting that there is a good relationship between plant biomass and ARA for FEH-1, but this breaks down a bit for Herald.
 
 ```{r}
 
@@ -288,16 +292,10 @@ ggplot(inoculated, aes(bgDM + shootDM, ara,  colour = Herbicide)) +
 ```
 
 
-
-#### What can other relationships tell us?
-
-What's driving what?  Given that there is a difference in the tolerance of the two varieties to herbicide, can we can use this difference to tell us whether reduced growth and biomass is affecting nitrogen fixation, or vice versa?
-
-
 ### What are the mechanisms
 Is this purely a plant growth issue? 
 
-Let's not forge the uninocuated controls...
+Let's not forget the uninoculated controls...
 
 ```{r}
 
@@ -319,24 +317,20 @@ ggplot(uninoculated, aes(Herbicide, shootDM + bgDM, colour = Variety)) +
 
 ```
 
-Obviously this isn't purely a nitrogen fixation issue.  Plant growth and nitrogen is being reduced by chlorsulfuron even when uninoculated plants are supplied with N.  
+Obviously this isn't purely a nitrogen fixation issue.  Plant growth and nitrogen is being reduced by chlorsulfuron even when uninoculated plants are supplied with N.  And interestingly, when looking only at uninoculated plants with excess nitrogen in the soil, we don't see a discrepancy between FEH-1 and Herald in the absence of herbicide.
 
 ### What about the rhizobia?
-Prior to inoculation, rhizobia were cultured with (herb) and without herbicide (RRI128).  And to check whether herbicide was carrying over with the inoculum, we also did a rinsing proceedure (washed).
+Prior to inoculation, rhizobia were cultured with (herb) and without herbicide (RRI128).  And to check whether herbicide was carrying over with the inoculum, we also did a rinsing procedure (washed).
 
 There were not any obvious main effects, but it will be interesting to see whether the stats reveal any subtle interactions.
 
 ### Is FEH-1 a solution?
 
-Yes.  And no.
+It looks like the answer is "Yes".  And "No".
 
-You'll have noted the interactions whereby in the presence of herbicide, FEH-1 generally performed better than Herald.  But in the absence of herbicde, Herald generally performed better that FEH-1.
+You'll have noted the interactions whereby in the presence of herbicide, FEH-1 generally performed better than Herald.  But in the absence of herbicide, Herald generally performed better that FEH-1.
 
-So if group B herbicides are used in-crop, or are have been used in preceeding crops and are expected to still reside in the soil, FEH-1 would be the best choice.  If, group B herbicides are not an issue, stick with Herald.
-
-
-## To summarise
-
+So if group B herbicides are used in-crop, or are have been used in preceding crops and are expected to still reside in the soil, FEH-1 would be the best choice.  If, group B herbicides are not an issue, stick with Herald.
 
 
 ## Now for some stats
@@ -355,51 +349,260 @@ library(emmeans)
 
 ```
 
+First up, let's look at nitrogenase activity.
 
+First we'll try a linear model looking for interactions but putting Block as an additive fixed effect (ie Block effect is assumed to be constant across all other treatments).
+
+```{r}
+aralm <- lm(ara~Variety*Herbicide*Inoculation + Block, data=inoculated)
+anova(aralm)
+plot(aralm, which = 1)
+```
+Note that the residuals show heteroscedacity.  That is, as the fitted values increase, the residuals increase.  Also note that there is curvature in the relationship between fitted values and residuals.  We'll need to do some transformations, but first let's compare this model with an lmer whereby we put Block in the random effects part of the model.
 
 ```{r}
 aralmer <- lmer(ara~Variety*Herbicide*Inoculation + (1|Block), data=inoculated)
 anova(aralmer)
-summary(aralmer)
-emmeans(aralmer, ~Variety*Herbicide, type = "response")
 plot(aralmer, which = 1)
 ```
+We get the same thing.  Unfortunately, with lmer, we don't get the red line showing trends in fitted values vs residuals.  Here, we don't get information about the Block effect because by specifying it as part of the random effects we are saying that we don't care about it.  Personally, I find it reassuring that the block effect was quite strong.  All that effort that went into randomising treatments within blocks, setting up, running and analysing the experiment in blocks, was worth it.  We now have more power to look at the treatment effects.
+
+Now for some transformations.  Noting that the residuals increase as the fitted values increase, a square root transformation should be useful.
+
+```{r}
+sqrt_ara_lm <- lm(sqrt(ara)~Variety*Herbicide*Inoculation + Block, data=inoculated)
+anova(sqrt_ara_lm)
+plot(sqrt_ara_lm, which = 1)
+```
+
+This is an improvement.  It's not perfect - there may still be some structure in that we have few samples on the left, but I think it is acceptable, and we will be interpreting the data along with other evidence.
+
+Again, we can repeat the analysis using lmer and put the block effect in with the random effects and we get the same thing.
 
 ```{r}
 sqrt_ara_lmer <- lmer(sqrt(ara)~Variety*Herbicide*Inoculation + (1|Block), data=inoculated)
 anova(sqrt_ara_lmer)
-summary(sqrt_ara_lmer)
-emmeans(sqrt_ara_lmer, ~Variety*Herbicide, type = "response")
+#summary(sqrt_ara_lmer)
+#emmeans(sqrt_ara_lmer, ~Variety*Herbicide, type = "response")
 plot(sqrt_ara_lmer)
-
 
 ```
 
+Out of interest, we can try a log transformation. Using lm we get 4 plots.  I'll need to do some digging to understand what they all mean.
+
+```{r}
+log_ara_lm <- lm(log(ara+1)~Variety*Herbicide*Inoculation + Block, data=inoculated)
+anova(log_ara_lm)
+#summary(log_ara_lm)
+#emmeans(log_ara_lm, ~Variety*Herbicide, type = "response")
+plot(log_ara_lm)
+
+```
 
 ```{r}
 log_ara_lmer <- lmer(log(ara+1)~Variety*Herbicide*Inoculation + (1|Block), data=inoculated)
 anova(log_ara_lmer)
-summary(log_ara_lmer)
-emmeans(log_ara_lmer, ~Variety*Herbicide, type = "response")
+#summary(log_ara_lmer)
+#emmeans(log_ara_lmer, ~Variety*Herbicide, type = "response")
 plot(log_ara_lmer)
-
-View(inoculated)
-
 ```
 
+So, looking at these statistical models, they are all telling us a similar story.  The rhizobia treatments make little difference, and there is an interaction between Variety and Herbicide.  
 
-## Questions for Terry
+So, what does the interaction mean?  Well, the effect of Herbicide is dependent on Variety, or the effect of Variety is dependent on Herbicide.
 
-ELegant ways to subset (levels)
+We can use emmeans to give us mean values and contrasts.
 
-Transformation - e.g. ara (square root?)
+```{r}
+emmeans(log_ara_lm, ~Variety*Herbicide, type = "response")
+emmeans(log_ara_lmer, ~Variety*Herbicide, type = "response")
+```
+Using the lm or lmer, we get the same response but the SE, df and confidence intervals are different because of the way we have averaged, with and without the block effect I suspect.
 
-Getting specific contrasts and showing that the differences are different from each other
+The story is still the same, though.  ARA of FEH-1 and Herald are the same in the absence of herbicide.  But in the presence of herbicide, ARA of Herald drops more than FEH-1.
 
-Derived or calculated variables e.g. amount of nitrogen fixed, fixed per nodule, fixed per unit nodule mass
+----
+So that was a fairly in depth look at statistical modelling of ARA.  There is still a lot more to look at.  I am going to cut straight to what I think are the most appropriate statistical models for the variables of interest, and use the stats to support or otherwise the interpretations of the data, whilst being on the lookout for any unanticipated findings. 
+----
 
-Nested designs - e.g. innoculated/uninoculated +-N, innoculated +H, -H, washed
+### Plant nitrogen
+Given that our main question is whether herbicides affect the amount of nitrogen fixed by medicago, and whether using a herbicide tolerant variety can be a solution to this problem, let's look at the amount of nitrogen in the plants.  We will look at inoculated plants only (not the O-N or O+N treatments).
+
+```{r Plant nitrogen statistical model I}
+TotalPlantN_lm <- lm(shootN + bgN ~ Variety*Herbicide*Inoculation + Block, data=inoculated)
+anova(TotalPlantN_lm)
+plot(TotalPlantN_lm)
+```
+
+```{r Plant nitrogen statistical model II}
+sqrtTotalPlantN_lm <- lm(sqrt(shootN + bgN) ~ Variety*Herbicide*Inoculation + Block, data=inoculated)
+anova(sqrtTotalPlantN_lm)
+plot(sqrtTotalPlantN_lm)
+```
+
+Taking the square root improves the residuals plot a bit, but doesn't change the story.  There is a very strong Variety by Herbicide interaction, and a hint of a Variety by Inoculation interaction with the sqrt transformed data.
+
+```{r}
+emmeans(TotalPlantN_lm, ~ Variety*Herbicide)
+```
+
+This is a very clear example of a classical interaction.  In the absence of herbicide, Herald plants contained more nitrogen than FEH-1 plants.  In the presence of herbicide, nitrogen contents declined more for Herald plants than FEH-1 plants so that FEH-1 plants had more nitrogen the Herald plants.  We already knew that from the visualisation.  The stats back it up.
+
+Just to satisfy myself, I will repeat using lmer and put the Block effect into the noise.
+
+```{r}
+sqrtTotalPlantN_lmer <- lmer(sqrt(shootN + bgN) ~ Variety*Herbicide*Inoculation + (1|Block), data=inoculated)
+anova(sqrtTotalPlantN_lmer)
+plot(sqrtTotalPlantN_lmer)
+emmeans(sqrtTotalPlantN_lmer, ~ Variety*Herbicide, type="response")
+```
+
+```{r}
+TotalPlantN_lmer <- lmer(shootN + bgN ~ Variety*Herbicide*Inoculation + (1|Block), data=inoculated)
+anova(TotalPlantN_lmer)
+plot(TotalPlantN_lmer)
+emmeans(TotalPlantN_lmer, ~ Variety*Herbicide)
+```
+Different confidence intervals, but same story really.
+ 
+What if we look at shoots and below ground separately?
+
+First the shoots...
+
+```{r Shoot nitrogen statistical model I}
+shootN_lm <- lm(shootN ~ Variety*Herbicide*Inoculation + Block, data=inoculated)
+anova(shootN_lm)
+plot(shootN_lm)
+emmeans(shootN_lm, ~ Variety*Herbicide)
+```
+
+The shoots are responding with that classic Variety by Herbicide interaction.
+
+Now for the roots+nodules...
+
+```{r below ground nitrogen statistical model I}
+bgN_lm <- lm(bgN ~ Variety*Herbicide*Inoculation + Block, data=inoculated)
+anova(bgN_lm)
+plot(bgN_lm)
+emmeans(bgN_lm, ~ Variety*Herbicide)
+emmeans(bgN_lm, pairwise ~ Herbicide)
+emmeans(bgN_lm, pairwise ~ Variety)
+```
+A hint of an interaction, but we can only be confident about the main effects of Variety and Herbicide, where NoHerbicide was greater than Herbicide, and Herald was greater than FEH-1.
+
+This is interesting.  In out visualisation we only looked at whole plant nitrogen and biomass.  But the statistical modelling suggests that the shoots and roots+nodules are responding differently. This is poignant given that the herbicide was applied to the shoots, and nodulation occurs in the roots.  This is useful information that could inform the design of a subsequent experiment.
+
+Time permitting it would be good to be able to plot shoots and bg on the same plot, above and below the x axis.
+
+### Plant biomass
+
+#### Shoots
+```{r shoot DM}
+shootDM_lm <- lm(shootDM ~ Variety*Herbicide*Inoculation + Block, data=inoculated)
+anova(shootDM_lm)
+plot(shootDM_lm)
+emmeans(shootDM_lm, ~ Variety*Herbicide)
+```
+
+```{r sqrt shoot DM}
+sqrtshootDM_lm <- lm(sqrt(shootDM) ~ Variety*Herbicide*Inoculation + Block, data=inoculated)
+anova(sqrtshootDM_lm)
+plot(sqrtshootDM_lm)
+emmeans(sqrtshootDM_lm, ~ Variety*Herbicide, type="response")
+emmeans(sqrtshootDM_lm, ~ Herbicide*Inoculation, type="response")
+```
+
+I log transformed the data which did not make much difference to the residual plot.  The sqrt transformation looked good.  We have a strong Herbicide by Variety interaction again.  We also have a Variety by Inoculation interaction because the 'washed' treatment without herbicide applied to the plant, had higher shoot DM than all others.  This result is difficult to interpret.
+
+#### Roots
+```{r root DM}
+bgDM_lm <- lm(bgDM ~ Variety*Herbicide*Inoculation + Block, data=inoculated)
+anova(bgDM_lm)
+plot(bgDM_lm)
+emmeans(bgDM_lm, ~ Variety*Herbicide, type="response")
+```
+```{r sqrt root+nodule DM}
+sqrtbgDM_lm <- lm(sqrt(bgDM) ~ Variety*Herbicide*Inoculation + Block, data=inoculated)
+anova(sqrtbgDM_lm)
+plot(sqrtbgDM_lm)
+emmeans(sqrtbgDM_lm, ~ Variety*Herbicide, type="response")
+```
+
+The sqrt transformation improved the homoscedacity of the residuals, and strengthened the Variety by Herbicide interaction.  For root+nodule DM, in the absence of herbicide FEH-1 had higher bgDM.  In the presence of herbicide, bgDM declined for both FEH-1 and Herald, more so for Herald, and then both ended up with the same bgDM.
+
+### Nodulation
+Let's look at nodules, which are the organs inside which the symbiosis happens.  To form nodules, there is some complex signalling between symbionts, infection of roots and development of nodules.  Then there is an exchange of compounds.  In reality, this experiment is looking at a very specific set of circumstances in which herbicide was applied to the shoots some time after much infection would have occurred.  We have nodule numbers which are somewhat arbitrary because clusters of nodules can form, and not all non-pink nodules may have been identified because they may have been too small to notice. We also have nodule masses, which are likely to be more reliable, particularly for pink nodules.
+
+```{r nodulation}
+sqrtpinknodmass_lm <- lm(sqrt(pinknodmass) ~ Variety*Herbicide*Inoculation + Block, data=inoculated)
+anova(sqrtpinknodmass_lm)
+plot(sqrtpinknodmass_lm)
+emmeans(sqrtpinknodmass_lm, ~ Variety*Herbicide, type="response")
+emmeans(sqrtpinknodmass_lm, ~ Herbicide*Inoculation, type="response")
+emmeans(sqrtpinknodmass_lm, ~ Variety*Inoculation, type="response")
+```
+
+Ok, this is a case where the stats are flagging some potentially interesting interactions that are easy to miss during visualisation due to noisy data.  Although it would be easy to discount these interactions as unimportant (and they are marginal in this experiment), we should try to interpret them in terms of their potential implications in a real world situation where a precautionary approach may be advisable.  
+
+We have seen differential effects of herbicide application to shoots on shoot and below ground biomass and nitrogen.  We are now seeing some different responses when herbicide has been added to flasks during culturing of the rhizobia, compared to no herbicide added to the flask, or the pellet of rhizobia washed, but only for FEH-1.  This is a one off observation at a more marginal p level so a subsequent experiment designed to examine the topical effects of herbicide on nodule development in the different plant genetic backgrounds would be advisable before drawing conclusions, especially given the fact that residual herbicides are of particular concern for many farmers.
+
+Now back to the Variety by Herbicide interaction which we have more confidence in... it is more similar to the shoot N and biomass interaction whereby in the absence of herbicide, Herald had greater pink nodule mass than FEH-1, whereas in the presence of herbicide, the pink nodule mass of Herald decline more than that of FEH-1, ending up lower and close to zero.
+
+SO we know that shoot and root biomass are affected.  Is nodule mass more or less sensitive that root biomass?  TO find out, we need to analyse nodule mass divided by root mass.
 
 
+```{r sqrt nodule DM / root DM}
+sqrtnodDMperrootDM_lm <- lm(sqrt(pinknodmass / rootDM) ~ Variety*Herbicide*Inoculation + Block, data=inoculated)
+anova(sqrtnodDMperrootDM)
+plot(sqrtnodDMperrootDM)
+emmeans(sqrtnodDMperrootDM_lm, ~ Variety*Herbicide, type="response")
+emmeans(sqrtnodDMperrootDM_lm, ~ Variety*Inoculation, type="response")
+```
+Again, there are some interesting interactions here that deserve some follow up.  But the clear message is that nodule mass is more sensitive to herbicide than root mass, and it depends on the Variety.  
 
+### Uninoculated plants
+
+We have focused on inoculated plants so far.  Let's take a closer look at the uninoculated plants which were included as controls.  
+
+```{r}
+uninoculatedN_lm <- lm(shootN + bgN ~ Variety*Herbicide*Inoculation + Block, data=uninoculated)
+anova(uninoculatedN_lm)
+plot(uninoculatedN_lm)
+emmeans(uninoculatedN_lm, ~ Variety*Herbicide)
+emmeans(uninoculatedN_lm, ~ Herbicide*Inoculation)
+```
+
+```{r}
+plusN <- filter(allsamples, Inoculation %in% c("O+N"))
+
+plusNN_lm <- lm(shootN + bgN ~ Variety*Herbicide + Block, data=plusN)
+anova(plusNN_lm)
+plot(plusNN_lm)
+emmeans(plusNN_lm, ~ Herbicide)
+```
+There was a main effect of herbicide on plant N
+
+```{r}
+uninoculatedDM_lm <- lm(shootDM + bgDM ~ Variety*Herbicide*Inoculation + Block, data=uninoculated)
+anova(uninoculatedDM_lm)
+plot(uninoculatedDM_lm)
+emmeans(uninoculatedDM_lm, ~ Variety*Herbicide)
+emmeans(uninoculatedDM_lm, ~ Herbicide*Inoculation)
+```
+The biomass response is a bit different from the N response because for O-N plants, whilst the nitrogen content didn't really drop with herbicide application, for dry matter it did, due in part to timing of application and continued growth until harvest in plants without herbicide accompanied by a decline in N concentration.
+
+
+## Bringing it all together
+Overall, the statistical modelling support the observations we made during the visualisation.  In addition the statistical modelling also revealed some subtleties that we overlooked.
+
+The key points are that:
+
+FEH-1 is not fully tolerant to group B herbicides
+Symbiotic nitrogen fixation is not as optimal in FEH-1 as in Herald in the absence of herbicide, which is also reflected in growth.
+However in the presence of herbicide, FEH-1 can continue to fix nitrogen whereas Herald was knocked out.
+It appears that there are similar treatment effects of Variety and Herbicide on nitrogen contents and biomass, but there is some plasticity there.
+Shoots were affected differently to roots.
+Importantly, nodule mass was more sensitive to root mass, but this may simply be a matter of timing.
+There were some differences in rhizobia treatments indiating potential carryover of herbicide from cultures of rhizobia and indicating the importance of topical exposure to herbicide.
+This experiment was a good first look, but with some well designed experiments it should be possible to better represent real agricultural systems, and also to get a better mechanistic understanding of how group B herbicides affect nodulation and nitrgen fixation.
 
