@@ -227,7 +227,7 @@ Ok, the data is noisy, but you can see that nitrogenase activity of FEH-1 and He
 
 We spent a lot of time plucking and counting nodules. Noting that herbicide was applied to shoots later than nodule initiation time, we would expect differential effects of herbicide on pink and non-pink nodules and also nodule mass.  Given the timing of herbicide application, we would expect nodule mass to be affected more so than nodule number.
 
-```{r nodulation, echo=FALSE}
+```{r nodulation plots, echo=FALSE}
 
 ggplot(inoculated, aes(Herbicide, pinknods, colour = Variety)) +
   geom_boxplot() +
@@ -532,7 +532,7 @@ The sqrt transformation improved the homoscedacity of the residuals, and strengt
 ### Nodulation
 Let's look at nodules, which are the organs inside which the symbiosis happens.  To form nodules, there is some complex signalling between symbionts, infection of roots and development of nodules.  Then there is an exchange of compounds.  In reality, this experiment is looking at a very specific set of circumstances in which herbicide was applied to the shoots some time after much infection would have occurred.  We have nodule numbers which are somewhat arbitrary because clusters of nodules can form, and not all non-pink nodules may have been identified because they may have been too small to notice. We also have nodule masses, which are likely to be more reliable, particularly for pink nodules.
 
-```{r nodulation}
+```{r nodulation stats}
 sqrtpinknodmass_lm <- lm(sqrt(pinknodmass) ~ Variety*Herbicide*Inoculation + Block, data=inoculated)
 anova(sqrtpinknodmass_lm)
 plot(sqrtpinknodmass_lm)
