@@ -619,19 +619,24 @@ Visualisation is super useful both for data exploration and data explanation.  I
 ### Statistical modelling
 Make the statistical modelling work for you.  It should flow naturally from the experimental design, which should flow naturally from the questions you set out to answer.  Think about statistical modelling from the perspective of supporting your data to answer the questions you are interested in, rather than it being an exercise to get an arbitrary p value just so you can a paper past some reviewer who doesn't really understand p values.
 
-### Pipelines and documentation
+### Workflows and documentation
 
 Using Rmarkdown is an excellent way to organise, conduct and document your work. It enables you to bring together the data, the exploratory visualisation, the statistical modelling, the explanatory visualisation and the reporting into a single document that is easily to update with version control, easy to use for presenting and discussing, and gives you the ability to make into a nice shiny document as an html or pdf, all in the one place. Brilliant.  
 
 No doubt markdown has a lot of functionality that I still need to explore, such as pandoc formatting for the final document.  But even before that, you have the ability to show or hide chunks or sections, keep all the code and choose whether or not it, warning messages or results appear in the final document.  
 
 ### Next steps
-I would also like to improve my ggplot skills, and think more about how to use visualisation for explanation and publication, not just exploration.
-I would like to get more proficient at r markdown, to the point where I can use it to produce publication quality reports and manuscripts for submission.
+
 A large part of my future work will be in chemometrics using multivariate analysis, principal components analysis, partial least squares regression, piece-wise direct standardisation.
-I will also be doing more modelling work so sampling data from distributions and outputting model outcomes probabalistically and generating explanatory visualisations would be very useful.
+
+I would like to get more proficient at r markdown, to the point where I can use it to produce publication quality reports and manuscripts for submission.
+
+I would also like to improve my ggplot skills, and think more about how to use visualisation for explanation and publication, not just exploration.  To do so, I need to improve on manipulating data using Tidyverse - I still don't fully understand gathers and things.
+
+I will also be doing more modelling work so sampling data from distributions and outputting model outcomes probabalistically and generating explanatory visualisations would be very useful.  The approaches would be similar to what people do for sensitivity and uncertainty analyses.  I'm not sure how related these are to statistical methods.
+
 
 ### Questions
-Subsetting data
-Specifying which contrasts you want
-What people ended up plotting for reporting purposes - when the visualisations already tell a good story, what do you add? ablines, confidence intervals..
+* Subsetting data
+* Specifying which contrasts you want
+* What people ended up plotting for reporting purposes - when the visualisations already tell a good story, what do you add? ablines, confidence intervals..
